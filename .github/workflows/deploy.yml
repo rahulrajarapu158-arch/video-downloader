@@ -17,6 +17,12 @@ jobs:
           workingDirectory: worker
           command: deploy src/index.js
 
+      - name: Create Pages project (if needed)
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          command: pages project create videograb --production-branch=main || true
+
       - name: Deploy Pages
         uses: cloudflare/wrangler-action@v4
         with:
