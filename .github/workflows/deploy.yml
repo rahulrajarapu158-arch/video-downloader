@@ -17,20 +17,19 @@ jobs:
           workingDirectory: worker
           command: deploy src/index.js
 
-      - name: Deploy Pages (auto-create if needed)
-        uses: cloudflare/wrangler-action@v4
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          command: pages deploy frontend --project-name=videograb --branch=main
+      - name: Install Wrangler
+        run: npm install -g wrangler@4
+
+      - name: Create Pages project (if not exists)
+        run: |
+          npx wrangler pages project create videograb --production-branch=main 2>/dev/null || echo "Project may already exist"
         env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: "40a4319a74d1e05592b2bf64c3f129f4"
 
-      - name: Deploy Pages (fallback - create if missing)
-        if: failure()
-        uses: cloudflare/wrangler-action@v4
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          command: pages deploy frontend --project-name=videograb --branch=main
+      - name: Deploy Pages
+        run: |
+          cd frontend && npx wrangler pages deploy . --project-name=videograb --branch=main
         env:
-          CLOUDFLARE_ACCOUNT_ID: "40a4319a74d1e05592b2bf64c3f129f4"
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: "40a4319a74d1e05592b2bf64c3f129f4"
