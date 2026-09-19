@@ -15,7 +15,7 @@ DENO_PATH = "/home/azureuser/.local/deno"
 YTDLP_PATH = "/home/azureuser/.local/bin/yt-dlp"
 
 def run_ytdlp(args):
-    return subprocess.run([YTDLP_PATH] + args + ["--js-runtimes", f"deno:{DENO_PATH}", "--remote-components", "ejs:github"], capture_output=True, text=True, timeout=120)
+    return subprocess.run([YTDLP_PATH] + args + ["--js-runtimes", DENO_PATH], capture_output=True, text=True, timeout=120)
 
 def get_info(url):
     try:
@@ -31,16 +31,7 @@ def get_info(url):
 
 def get_dl(url, q="720"):
     try:
-        # Use format IDs for better compatibility
-        # 136=720p, 135=480p, 134=360p, 133=240p, 140=audio
-        qm = {
-            "1080": "137+140/best",
-            "720": "136+140/135+140/best",
-            "480": "135+140/134+140/best",
-            "360": "134+140/133+140/best",
-            "240": "133+140/best",
-            "audio": "140/251/250",
-        }
+        qm = {"1080":"bv[h<=1080]+ba/b[h<=1080]","720":"bv[h<=720]+ba/b[h<=720]","480":"bv[h<=480]+ba/b[h<=480]","360":"bv[h<=360]+ba/b[h<=360]","audio":"ba"}
         fmt = qm.get(q, qm["720"])
         r = run_ytdlp(["-g", "-f", fmt, url])
         if r.returncode != 0:
