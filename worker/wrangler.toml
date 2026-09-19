@@ -3,5 +3,5 @@ main = "src/index.js"
 compatibility_date = "2024-01-01"
 account_id = "8cf7456b44767c5e0b2d58e6072f2fae"
 
-# Use workers.dev subdomain (auto-created on first deploy)
-# Or specify your own route/zone if you have a custom domain
+# Auto-register workers.dev subdomain
+workers_dev = true
