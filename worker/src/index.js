@@ -3,7 +3,7 @@ addEventListener("fetch", (event) => {
 });
 
 // Use Cloudflare Tunnel URL for the VPS backend
-const VPS_BACKEND = "http://100.93.221.72:8080";
+const VPS_BACKEND = "http://98.70.56.106:8080";
 
 async function handleRequest(event) {
     const request = event.request;
