@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Downloader - Download Videos from Any Platform</title>
+    <meta name="description" content="Free video downloader for YouTube, Instagram, Twitter/X, TikTok, Facebook. No watermark, high quality, fast downloads.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=http://www.w3.org/2000/svg viewBox=0 0 100 100><text y=.9em font-size=90>📥</text></svg>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0b10; --surface: #12131a; --surface2: #1a1b25;
+            --border: #2a2b3a; --text: #e8e9f0; --text2: #8b8ca0;
+            --accent: #6366f1; --accent-hover: #818cf8;
+            --success: #22c55e; --error: #ef4444;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+        header { padding: 20px 40px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 1.25rem; font-weight: 700; color: var(--text); text-decoration: none; }
+        nav { display: flex; gap: 24px; }
+        nav a { color: var(--text2); text-decoration: none; font-size: 0.9rem; }
+        nav a:hover { color: var(--text); }
+        main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 60px 20px; max-width: 700px; margin: 0 auto; width: 100%; }
+        .hero { text-align: center; margin-bottom: 40px; }
+        .hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; background: linear-gradient(135deg, var(--accent), #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { color: var(--text2); font-size: 1.1rem; max-width: 500px; margin: 0 auto; }
+        .platforms { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 32px; }
+        .platform-badge { padding: 6px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text2); }
+        .input-section { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+        .input-group { display: flex; gap: 12px; margin-bottom: 16px; }
+        .url-input { flex: 1; padding: 14px 18px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 1rem; outline: none; }
+        .url-input:focus { border-color: var(--accent); }
+        .url-input::placeholder { color: var(--text2); }
+        .quality-select { padding: 14px 18px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 0.9rem; outline: none; cursor: pointer; min-width: 120px; }
+        .download-btn { width: 100%; padding: 16px; background: var(--accent); border: none; border-radius: 10px; color: white; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        .download-btn:hover { background: var(--accent-hover); }
+        .download-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .status-area { width: 100%; margin-top: 24px; padding: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; display: none; }
+        .status-area.visible { display: block; }
+        .status-loading { display: flex; align-items: center; gap: 12px; color: var(--text2); }
+        .spinner { width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .status-success { display: flex; flex-direction: column; gap: 12px; }
+        .status-title { font-weight: 600; color: var(--success); }
+        .download-link { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--success); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; }
+        .status-error { color: var(--error); }
+        footer { padding: 20px 40px; border-top: 1px solid var(--border); text-align: center; color: var(--text2); font-size: 0.85rem; }
+        footer a { color: var(--accent); text-decoration: none; }
+        @media (max-width: 600px) {
+            header { padding: 16px 20px; flex-direction: column; gap: 12px; }
+            main { padding: 30px 16px; }
+            .hero h1 { font-size: 1.8rem; }
+            .input-group { flex-direction: column; }
+            .quality-select { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">📥 VideoGrab</a>
+        <nav><a href="#about">About</a><a href="#faq">FAQ</a></nav>
+    </header>
+    <main>
+        <div class="hero">
+            <h1>Download Any Video</h1>
+            <p>Free, fast, and watermark-free. Paste a link from any supported platform.</p>
+        </div>
+        <div class="platforms">
+            <span class="platform-badge">YouTube</span>
+            <span class="platform-badge">Instagram</span>
+            <span class="platform-badge">Twitter/X</span>
+            <span class="platform-badge">TikTok</span>
+            <span class="platform-badge">Facebook</span>
+        </div>
+        <div class="input-section">
+            <div class="input-group">
+                <input type="text" class="url-input" id="urlInput" placeholder="Paste video URL here...">
+                <select class="quality-select" id="qualitySelect">
+                    <option value="1080">1080p</option>
+                    <option value="720" selected>720p</option>
+                    <option value="480">480p</option>
+                    <option value="360">360p</option>
+                    <option value="audio">Audio Only</option>
+                </select>
+            </div>
+            <button class="download-btn" id="downloadBtn">Download Video</button>
+        </div>
+        <div class="status-area" id="statusArea"></div>
+    </main>
+    <footer>
+        <p>Built with ❤️ | Powered by cobalt.tools</p>
+        <p style="margin-top:4px">100% free, no ads, no tracking</p>
+    </footer>
+    <script>
+        const urlInput = document.getElementById("urlInput");
+        const qualitySelect = document.getElementById("qualitySelect");
+        const downloadBtn = document.getElementById("downloadBtn");
+        const statusArea = document.getElementById("statusArea");
+
+        function detectPlatform(url) {
+            if (!url) return null;
+            const p = { youtube: /(youtube\.com|youtu\.be)/i, instagram: /instagram\.com/i, twitter: /(twitter\.com|x\.com)/i, tiktok: /tiktok\.com/i, facebook: /(facebook\.com|fb\.watch)/i, vimeo: /vimeo\.com/i, reddit: /reddit\.com/i };
+            for (const [name, regex] of Object.entries(p)) { if (regex.test(url)) return name; }
+            return "unknown";
+        }
+
+        downloadBtn.addEventListener("click", startDownload);
+        urlInput.addEventListener("keypress", (e) => { if (e.key === "Enter") startDownload(); });
+
+        async function startDownload() {
+            const url = urlInput.value.trim();
+            const quality = qualitySelect.value;
+            if (!url) { showStatus("error", "Please enter a video URL"); return; }
+            const platform = detectPlatform(url);
+            if (!platform || platform === "unknown") { showStatus("error", "Unsupported platform"); return; }
+            showStatus("loading", "Extracting video from " + platform + "...");
+            downloadBtn.disabled = true;
+            try {
+                const resp = await fetch("/api/extract", { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({ url, quality }) });
+                const data = await resp.json();
+                if (data.error) { showStatus("error", data.error); }
+                else if (data.success && data.downloadUrl) { showStatus("success", data.title || "video", data.downloadUrl); }
+                else { showStatus("error", "Could not extract video. Try a different URL or quality."); }
+            } catch (err) { showStatus("error", "Network error. Please try again."); }
+            finally { downloadBtn.disabled = false; }
+        }
+
+        function showStatus(type, msg, url) {
+            statusArea.classList.add("visible");
+            if (type === "loading") { statusArea.innerHTML = "<div class="status-loading"><div class="spinner"></div><span>" + msg + "</span></div>"; }
+            else if (type === "success") { statusArea.innerHTML = "<div class="status-success"><div class="status-title">✓ Ready: " + msg + "</div><a href="" + url + "" class="download-link" target="_blank">⬇️ Download Video</a></div>"; }
+            else if (type === "error") { statusArea.innerHTML = "<div class="status-error">✗ " + msg + "</div>"; }
+        }
+    </script>
+</body>
+</html>
