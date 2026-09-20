@@ -3,5 +3,8 @@ main = "src/index.js"
 compatibility_date = "2024-01-01"
 account_id = "8cf7456b44767c5e0b2d58e6072f2fae"
 
-# Auto-register workers.dev subdomain
 workers_dev = true
+
+routes = [
+  { pattern = "vgrab.dpdns.org/api/*", zone_name = "vgrab.dpdns.org" }
+]
