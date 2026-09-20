@@ -116,7 +116,7 @@
             showStatus("loading", "Extracting video from " + platform + "...");
             downloadBtn.disabled = true;
             try {
-                const resp = await fetch("/api/extract", { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({ url, quality }) });
+                const resp = await fetch("https://api.vgrab.dpdns.org/api/extract", { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({ url, quality }) });
                 const data = await resp.json();
                 if (data.error) { showStatus("error", data.error); }
                 else if (data.success && data.downloadUrl) { showStatus("success", data.title || "video", data.downloadUrl); }
