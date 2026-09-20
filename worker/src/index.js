@@ -3,7 +3,7 @@ addEventListener("fetch", (event) => {
 });
 
 // Use Cloudflare Tunnel URL for the VPS backend
-const VPS_BACKEND = "https://a3306f1c-6270-4849-9f38-f222cfc04fd5.cfargotunnel.com";
+const VPS_BACKEND = "https://gentle-berries-tie.loca.lt";
 
 async function handleRequest(event) {
     const request = event.request;
